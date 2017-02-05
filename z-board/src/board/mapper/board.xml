@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+	<select id="list" resultType="board.dto.BoardDTO">
+		select * from board
+	</select>
+	
+	<insert id="insert">
+		insert into board(num, writer, subject, passwd, content) 
+		values ( (select a.* from (select ifnull(max(num)+1,1)from board)a)
+				, #{writer}, #{subject}, #{passwd}, #{content} )
+	</insert>
+	
+	<select id="selectOne" resultType="board.dto.BoardDTO">
+		select * from board where num=#{num}
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
