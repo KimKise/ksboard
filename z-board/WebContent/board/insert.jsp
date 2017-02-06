@@ -7,6 +7,7 @@
 <script src="http://code.jquery.com/jquery-3.1.1.js"></script>
 <title>Insert title here</title>
 <%@ include file="../include/header.jsp" %>
+<%@ include file="../include/css.jsp" %>
 <script>
 $(document).ready(function(){
 	$("#btnSave").click(function(){
@@ -36,15 +37,17 @@ $(document).ready(function(){
 </head>
 <body>
 <h2>글쓰기</h2>
+<hr size="5" color="#48586d">
 <form name="form1" method="post" action="${path}/board_servlet/insert.do">
-<table border="1" width="700px">
+<table class="board_view">
+<tbody>
 	<tr>
 		<th align="center">작성자</th>
 		<td><input name="writer" id="writer"></td>
 	</tr>
 	<tr>
 		<th align="center">제목</th>
-		<td><input name="subject" id="subject"  size="62"></td>
+		<td><input name="subject" id="subject"  size="59"></td>
 	</tr>
 	<tr>
 		<th align="center">본문</th>
@@ -56,9 +59,10 @@ $(document).ready(function(){
 	</tr>
 	<tr>
 		<td align="center" colspan="2">
-			<button type="button" id="btnSave">확인</button>
+			<button type="button" id="btnSave" class="btn">확인</button>
 		</td>
 	</tr>
+	</tbody>
 </table>
 </form>
 </body>

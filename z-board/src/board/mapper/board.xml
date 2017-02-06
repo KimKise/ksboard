@@ -5,18 +5,39 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="board">
 	<select id="list" resultType="board.dto.BoardDTO">
-		select * from board
+		select * from board order by num desc
 	</select>
 	
 	<insert id="insert">
 		insert into board(num, writer, subject, passwd, content) 
-		values ( (select a.* from (select ifnull(max(num)+1,1)from board)a)
+		values ( (select nvl(max(num)+1, 1) from board)
 				, #{writer}, #{subject}, #{passwd}, #{content} )
 	</insert>
 	
 	<select id="selectOne" resultType="board.dto.BoardDTO">
 		select * from board where num=#{num}
 	</select>
+	
+	<select id="passwd_check" resultType="String">
+		select passwd from board 
+		where num=#{num} and passwd=#{passwd}
+	</select>
+	
+	<update id="update">
+		update board
+		set subject=#{subject}, content=#{content}, passwd=#{passwd}
+		where num=#{num}
+	</update>
+	
+	<delete id="delete">
+		delete from board 
+		where num=#{num}
+	</delete>
+	
+	<update id="readcount">
+		update board set readcount = readcount + 1 
+		where num=#{num}
+	</update>
 </mapper>
 
 

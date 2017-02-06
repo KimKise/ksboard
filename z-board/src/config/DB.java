@@ -15,8 +15,8 @@ public class DB {
 			//context.xml을 분석하는 객체
 			Context ctx = new InitialContext(); //javax.naming
 			//context.xml의 Resource태그 검색
+//mysql:	ds=(DataSource)ctx.lookup("java:comp/env/myDB");
 			ds=(DataSource)ctx.lookup("java:comp/env/myDB");
-//oracle:	ds=(DataSource)ctx.lookup("java:comp/env/oraDB");
 			conn = ds.getConnection(); //커넥션을 할당 받음
 		} catch (Exception e) {
 			e.printStackTrace();

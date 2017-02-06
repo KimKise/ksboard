@@ -10,12 +10,18 @@
 <%@ include file="../include/css.jsp" %>
 <script>
 $(document).ready(function(){
-	
+	$("#list").click(function(){
+		location.href ="${path}/board_servlet/list.do";
+	});
+	$("#btnEdit").click(function(){
+		document.form1.action = "${path}/board_servlet/passwd_check.do";
+		document.form1.submit();
+	});
 });
 </script>
 </head>
 <body>
-<h2>게시글 수정</h2>
+<h2>게시글 상세 목록</h2>
 <hr size="5" color="#48586d">
 <form name="form1" method="post" action="">
 <table class="board_view">
@@ -42,12 +48,18 @@ $(document).ready(function(){
 	</tr>
 	<tr>
 		<th align="center">비밀번호</th>
-		<td colspan="3"><input type="password" id="passwd"></td>
+		<td colspan="3"><input type="password" name="passwd"></td>
+			<c:if test="${param.message=='error'}">
+				<span style="color : red">
+					비밀번호가 일치하지 않습니다.
+				</span>			
+			</c:if>
 	</tr>
 	</tbody>
 	<tr>
 		<td align="center" colspan="4">
-			<button type="button" id="btnEdit" class="btn">수정</button>
+			<input type="hidden" name="num" value="${dto.num}">
+			<button type="button" id="btnEdit" class="btn">수정/삭제</button>
 			<button type="button" id="btnReply" class="btn">답변</button>
 			<button type="button" id="list" class="btn">목록</button>
 		</td>

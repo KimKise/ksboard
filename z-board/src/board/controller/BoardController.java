@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.PageContext;
 
 import board.dao.BoardDAO;
@@ -51,12 +52,58 @@ public class BoardController extends HttpServlet {
 			response.sendRedirect(page);
 		}else if(url.indexOf("detail.do") != -1){
 			BoardDTO dto = new BoardDTO();
-			String num = request.getParameter("num");
-			dto = dao.selectOne(num);
+			int num = Integer.parseInt(request.getParameter("num"));
+			//세션 객체 생성, 조회수 바로바로 업뎃 안되게
+			HttpSession session = request.getSession();
+			//조회수 증가
+			dao.readcount(num, session);
+			//view를 받기 전에 조회수 증가 처리를 해야한다.
+			dto = dao.detail(num);
 			request.setAttribute("dto", dto);
+			
+			
 			String page="/board/detail.jsp";
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
+		}else if(url.indexOf("passwd_check.do") != -1){
+			//게시물 번호
+			int num = Integer.parseInt(request.getParameter("num"));
+			String passwd = request.getParameter("passwd");
+			boolean result = dao.passwdCheck(num, passwd);
+			String page = null;
+			if(result){//비번이 맞으면
+				request.setAttribute("dto", dao.detail(num));
+				page="/board/edit.jsp";
+				RequestDispatcher rd = request.getRequestDispatcher(page);
+				rd.forward(request, response);
+			}else{//비번이 맞지 않으면
+				page="/board_servlet/detail.do?num="+num+"&message=error";
+				response.sendRedirect(request.getContextPath()+page);
+			}
+		}else if(url.indexOf("update.do") != -1){
+			int num = Integer.parseInt(request.getParameter("num"));
+			String writer = request.getParameter("writer");
+			String subject = request.getParameter("subject");
+			String content = request.getParameter("content");
+			String passwd = request.getParameter("passwd");
+			
+			BoardDTO dto = new BoardDTO();
+			dto.setNum(num);
+			dto.setWriter(writer);
+			dto.setSubject(subject);
+			dto.setContent(content);
+			dto.setPasswd(passwd);
+		
+			dao.update(dto);
+			
+			String page = "/board_servlet/list.do";
+			response.sendRedirect(contextPath+page);
+		}else if(url.indexOf("delete.do") != -1){
+			int num = Integer.parseInt(request.getParameter("num"));
+			dao.delete(num);
+			
+			String page="/board_servlet/list.do";
+			response.sendRedirect(contextPath+page);
 		}
 	}
 
