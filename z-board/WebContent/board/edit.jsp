@@ -42,13 +42,20 @@ $(document).ready(function(){
 			return;
 		}
 	});
+	$("#btnClear").click(function(){
+		document.form1.file1.select();
+		document.form1.filename.select();
+		document.getElementById('filename').select();
+		document.selection.clear;
+		
+	});
 });
 </script>
 </head>
 <body>
 <h2>게시글 수정/삭제</h2>
 <hr size="5" color="#48586d">
-<form name="form1" method="post" action="">
+<form name="form1" method="post" action="" enctype="multipart/form-data">
 <table class="board_view">
 <tbody>
 	<tr>
@@ -72,6 +79,14 @@ $(document).ready(function(){
 		<td colspan="3"><textarea rows="6" cols="50" name="content">${dto.content}</textarea> </td>
 	</tr>
 	<tr>
+		<th align="center">첨부파일</th>
+		<td>
+			<label id="filename">${dto.filename}</label><input type="file" name="file1">
+			<input type="hidden" name="filename" value="${dto.filename}">
+		</td>
+		<td><button type="button" id="btnClear">첨부 취소</button></td>
+	</tr>
+	<tr>
 		<th align="center">새 비밀번호</th>
 		<td colspan="3"><input type="password" name="passwd" id="passwd" value="${dto.passwd}"></td>
 	</tr>
@@ -87,7 +102,6 @@ $(document).ready(function(){
 			<button type="button" id="btnDelete" class="btn">삭제</button>
 		</td>
 	</tr>
-
 </table>
 </form>
 </body>

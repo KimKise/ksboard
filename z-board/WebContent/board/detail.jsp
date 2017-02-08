@@ -47,6 +47,19 @@ $(document).ready(function(){
 		<td colspan="3">${dto.content}</td>
 	</tr>
 	<tr>
+		<th align="center">첨부파일</th>
+		<td>
+			<c:if test="${dto.filesize>0}">
+				<%-- <a href="${path}/upload/${dto.filename}"><img src="${path}/images/download.png"></a> --%>
+				<a href="${path}/board_servlet/download.do?num=${dto.num}">
+					${dto.filename}
+				</a>
+			</c:if>
+		</td>
+		<th align="center">다운 횟수</th>
+		<td>${dto.download}</td>
+	</tr>
+	<tr>
 		<th align="center">비밀번호</th>
 		<td colspan="3"><input type="password" name="passwd"></td>
 			<c:if test="${param.message=='error'}">

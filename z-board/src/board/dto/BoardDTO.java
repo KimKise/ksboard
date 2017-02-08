@@ -11,10 +11,44 @@ public class BoardDTO {
 	private int readcount;
 	private String content;
 	private String ip;
+	private String filename;
+	private int filesize;
+	private int download;
 	
 	public BoardDTO() {
 		
 	}
+
+	
+	public String getFilename() {
+		return filename;
+	}
+
+
+	public void setFilename(String filename) {
+		this.filename = filename;
+	}
+
+
+	public int getFilesize() {
+		return filesize;
+	}
+
+
+	public void setFilesize(int filesize) {
+		this.filesize = filesize;
+	}
+
+
+	public int getDownload() {
+		return download;
+	}
+
+
+	public void setDownload(int download) {
+		this.download = download;
+	}
+
 
 	public int getNum() {
 		return num;
@@ -80,11 +114,15 @@ public class BoardDTO {
 		this.ip = ip;
 	}
 
+
 	@Override
 	public String toString() {
 		return "BoardDTO [num=" + num + ", writer=" + writer + ", subject=" + subject + ", passwd=" + passwd
-				+ ", reg_date=" + reg_date + ", readcount=" + readcount + ", content=" + content + ", ip=" + ip + "]";
+				+ ", reg_date=" + reg_date + ", readcount=" + readcount + ", content=" + content + ", ip=" + ip
+				+ ", filename=" + filename + ", filesize=" + filesize + ", download=" + download + "]";
 	}
+
+
 	
 	
 }

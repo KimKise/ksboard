@@ -9,9 +9,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<insert id="insert">
-		insert into board(num, writer, subject, passwd, content) 
+		insert into board(num, writer, subject, passwd, content, filename, filesize) 
 		values ( (select nvl(max(num)+1, 1) from board)
-				, #{writer}, #{subject}, #{passwd}, #{content} )
+				, #{writer}, #{subject}, #{passwd}, #{content}, #{filename}, #{filesize} )
 	</insert>
 	
 	<select id="selectOne" resultType="board.dto.BoardDTO">
@@ -38,6 +38,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		update board set readcount = readcount + 1 
 		where num=#{num}
 	</update>
+	
+	<!-- 첨부파일 이름 조회  -->
+	<select id="getFileName" resultType="String">
+		select filename from board where num=#{num}
+	</select>
+	
+	<update id="plusDownload">
+		update board set download = download+1 where num=#{num}
+	</update>
+	
+	
+	<!-- 샵{변수}	: 따옴표 포함 /달러{변수}	: 따옴표 제거-->
+	<select id="searchList" resultType="board.dto.BoardDTO">
+		select * from board 
+		<if test="search_option != 'all'">
+			where ${search_option} like '%' || #{keyword} || '%'
+		</if>
+		<if test="search_option == 'all'">
+			where writer like '%' || #{keyword} || '%'
+			or subject like '%' || #{keyword} || '%'
+			or content like '%' || #{keyword} || '%'
+		</if>
+		order by num desc
+	</select>
 </mapper>
 
 

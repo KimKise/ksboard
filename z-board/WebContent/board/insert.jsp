@@ -38,10 +38,16 @@ $(document).ready(function(){
 <body>
 <h2>글쓰기</h2>
 <hr size="5" color="#48586d">
-<form name="form1" method="post" action="${path}/board_servlet/insert.do">
+
+<!--
+	* 파일 업로드
+	-. form태그의 enctype속성은 폼을 전송할때 사용할 인코딩 밥법을 지정한다.  
+	-. multipart/form-data : 어떠한 문자 인코딩도 하지 않는다. 주로 파일업로드 컨트롤을 제공하는 경우 사용
+-->
+<form name="form1" method="post" action="${path}/board_servlet/insert.do" enctype="multipart/form-data">
 <table class="board_view">
 <tbody>
-	<tr>
+	<tr> 
 		<th align="center">작성자</th>
 		<td><input name="writer" id="writer"></td>
 	</tr>
@@ -52,6 +58,10 @@ $(document).ready(function(){
 	<tr>
 		<th align="center">본문</th>
 		<td><textarea rows="5" cols="60" name="content" id="content"></textarea> </td>
+	</tr>
+	<tr>
+		<th align="center">첨부파일</th>
+		<td><input type="file" name="file1"></td>
 	</tr>
 	<tr>
 		<th align="center">비밀번호</th>

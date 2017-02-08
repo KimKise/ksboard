@@ -139,5 +139,58 @@ public class BoardDAO {
 		}
 		
 	}
+	
+	public String getFileName(int num){
+		String result=null;
+		SqlSession session=null;
+		try {
+			session = MybatisService.getFactory().openSession();
+			result = session.selectOne("board.getFileName", num);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			if(session != null)session.close();
+		}
+		return result;
+	}
+	
+	public void plusDownload(int num){
+		SqlSession session = null;
+		try {
+			session = MybatisService.getFactory().openSession();
+			session.update("board.plusDownload", num);
+			session.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			if(session != null)session.close();
+		}
+	}
+	public List<BoardDTO> searchList(String search_option, String keyword) {
+		SqlSession session = null;
+		List<BoardDTO> list = null;
+		try {
+			session = MybatisService.getFactory().openSession();
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("search_option", search_option);
+			map.put("keyword", keyword);
+			list = session.selectList("board.searchList", map);
+			
+			//키워드의 색상 변경 처리
+			for(BoardDTO dto : list){
+				String writer = dto.getWriter();
+				String subject = dto.getSubject();
+				writer = writer.replace(keyword, "<span style='color:red'>"+keyword+"</span>");
+				subject = subject.replace(keyword, "<span style='color:red'>"+keyword+"</span>");
+				dto.setWriter(writer);
+				dto.setSubject(subject);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			if(session != null)session.close();
+		}
+		return list;
+	}
 
 }
