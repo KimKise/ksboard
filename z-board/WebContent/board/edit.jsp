@@ -81,10 +81,8 @@ $(document).ready(function(){
 	<tr>
 		<th align="center">첨부파일</th>
 		<td>
-			<label id="filename">${dto.filename}</label><input type="file" name="file1">
-			<input type="hidden" name="filename" value="${dto.filename}">
+			 <input type="file" name="file1">
 		</td>
-		<td><button type="button" id="btnClear">첨부 취소</button></td>
 	</tr>
 	<tr>
 		<th align="center">새 비밀번호</th>

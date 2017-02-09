@@ -25,7 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<update id="update">
 		update board
-		set subject=#{subject}, content=#{content}, passwd=#{passwd}
+		set subject=#{subject}, content=#{content}, passwd=#{passwd}, filename=#{filename}, filesize=#{filesize}
 		where num=#{num}
 	</update>
 	
@@ -62,9 +62,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</if>
 		order by num desc
 	</select>
+	
+	<select id="commentList" resultType="board.dto.BoardCommentDTO">
+		select * from board_comment where board_num = #{board_num} 
+		order by comment_num desc
+	</select>
+	
+	<update id="commentAdd">
+		insert into board_comment (comment_num, board_num, writer, content)
+		values( (select nvl(max(comment_num)+1, 1) from board_comment), #{board_num}, #{writer}, #{content} )
+	</update>
 </mapper>
-
-
 
 
 

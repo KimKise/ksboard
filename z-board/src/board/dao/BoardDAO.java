@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
 
+import board.dto.BoardCommentDTO;
 import board.dto.BoardDTO;
 import config.MybatisService;
 
@@ -191,6 +192,32 @@ public class BoardDAO {
 			if(session != null)session.close();
 		}
 		return list;
+	}
+	public List<BoardCommentDTO> commentList(int board_num) {
+		SqlSession session = null;
+		List<BoardCommentDTO> list = null;
+		try {
+			session = MybatisService.getFactory().openSession();
+			list = session.selectList("board.commentList", board_num);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			if(session != null)session.close();
+		}
+		return list;
+	}
+	public void commentAdd(BoardCommentDTO dto) {
+		SqlSession session = null;
+		try {
+			session = MybatisService.getFactory().openSession();
+			session.update("board.commentAdd", dto);
+			session.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			if(session != null)session.close();
+		}
+		
 	}
 
 }

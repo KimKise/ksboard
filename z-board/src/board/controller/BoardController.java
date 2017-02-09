@@ -20,6 +20,7 @@ import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import board.dao.BoardDAO;
+import board.dto.BoardCommentDTO;
 import board.dto.BoardDTO;
 import common.Constants;
 
@@ -118,19 +119,38 @@ public class BoardController extends HttpServlet {
 				response.sendRedirect(request.getContextPath()+page);
 			}
 		}else if(url.indexOf("update.do") != -1){
-			int num = Integer.parseInt(request.getParameter("num"));
-			String writer = request.getParameter("writer");
-			String subject = request.getParameter("subject");
-			String content = request.getParameter("content");
-			String passwd = request.getParameter("passwd");
-			
 			BoardDTO dto = new BoardDTO();
+			MultipartRequest multi = new MultipartRequest(
+					request, Constants.UPLOAD_PATH, Constants.MAX_UPLOAD,"utf-8",new DefaultFileRenamePolicy());
+			String filename="";
+			int filesize=0;
+			
+			try {
+				Enumeration files = multi.getFileNames();
+				while(files.hasMoreElements()){
+					String file1=(String)files.nextElement();
+					filename = multi.getFilesystemName(file1);
+					File f1 = multi.getFile(file1);
+					filesize = (int)f1.length();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			int num = Integer.parseInt(multi.getParameter("num"));
+			String writer = multi.getParameter("writer");
+			String subject = multi.getParameter("subject");
+			String content = multi.getParameter("content");
+			String passwd = multi.getParameter("passwd");
+			
 			dto.setNum(num);
 			dto.setWriter(writer);
 			dto.setSubject(subject);
 			dto.setContent(content);
 			dto.setPasswd(passwd);
-		
+			if(filename ==null|| filename.trim().equals("")) filename="-";
+			dto.setFilename(filename);
+			dto.setFilesize(filesize);
 			dao.update(dto);
 			
 			String page = "/board_servlet/list.do";
@@ -199,6 +219,28 @@ public class BoardController extends HttpServlet {
 			String page="/board/search.jsp";
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
+		}else if(url.indexOf("commentList.do") != -1){
+			int board_num = Integer.parseInt(request.getParameter("board_num"));
+			List<BoardCommentDTO> commentList = dao.commentList(board_num); 
+			request.setAttribute("commentList", commentList);
+			
+			String page="/board/commentList.jsp";
+			RequestDispatcher rd = request.getRequestDispatcher(page);
+			rd.forward(request, response);
+		}else if(url.indexOf("comment_add.do") != -1){
+			int board_num = Integer.parseInt(request.getParameter("board_num"));
+			String writer = request.getParameter("writer");
+			String content = request.getParameter("content");
+			
+			BoardCommentDTO dto = new BoardCommentDTO();
+			
+			dto.setBoard_num(board_num);
+			dto.setWriter(writer);
+			dto.setContent(content);
+			
+			dao.commentAdd(dto);
+			//처리가 완료되면 ajax를 호출한 곳으로 돌아감
+			
 		}
 	}
 
